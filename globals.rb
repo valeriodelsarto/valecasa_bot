@@ -1,4 +1,4 @@
-$Version = "1.0.1"
+$Version = "1.0.2"
 
 $token_file = '/opt/valecasa_bot_telegram.token'
 $downl_pass = IO.read('/opt/valecasa_bot_telegram.pass').chomp
@@ -22,7 +22,7 @@ $array_kodi_folder.push("SD")
 $array_kodi_folder.push("SerieTV")
 
 $cmd_lista_1     = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"show dl\" | sed 1,4d"
-$cmd_lista_1_s   = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"show dl\" | sed 1,4d | sed ':a;N;$!ba;s/\\n\\s>\\s\\s//g' | sed 's/\\s>\\s//' | sed 's/^.\\{33\\}//' | sed 's/%].*\\s-\\s/%] /' | sed 's/Auto\\s//' | awk -F' \\[' '{print substr($1,0,30)\" [\"$2}'"
+$cmd_lista_1_s   = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"show dl\" | sed 1,4d | sed ':a;N;$!ba;s/\\n\\s>\\s\\s//g' | sed 's/\\s>\\s//' | sed 's/^.\\{33\\}//' | sed 's/%].*\\s-\\s/%] /' | sed 's/Auto\\s//' | awk -F'(\\.avi \\[)|(\\.mkv \\[)' '{print substr($1,0,30)\" [\"$2}'"
 $cmd_lista_2     = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -l"
 $cmd_aggiungi_1  = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"add <ed2klink>\" | sed 1,4d"
 $cmd_aggiungi_2  = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -a <torrent>"
