@@ -42,7 +42,7 @@ $cmd_remove_t    = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -t 1 
 $cmd_remove_e    = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"cancel <hash>\" | sed 1,4d"
 $cmd_e_choose_1  = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"show dl\" | sed 1,4d | egrep -v \".*\[[0-9]{1,2}\.[0-9]{1,2}\%\].*\" | awk \'{print substr($0, index($0,$3))}\'"
 $cmd_e_choose_2  = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"show dl\" | sed 1,4d | egrep -v \".*\[[0-9]{1,2}\.[0-9]{1,2}\%\].*\" | awk \'{print $2}\'"
-$cmd_t_choose_1  = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -l | egrep \".* [0-9]{1,2}\% .*\" | awk \'{print $10}\'"
+$cmd_t_choose_1  = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -l | egrep \".* [0-9]{1,3}\% .*\" | awk \'{print $10}\'"
 $cmd_remove_t_x  = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -t <number> -r"
 
 $cmd_ferma_e     = '/usr/bin/sudo /usr/sbin/service amule-daemon stop'
