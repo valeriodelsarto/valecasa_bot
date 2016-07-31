@@ -840,6 +840,9 @@ begin
               errors = true if !stderr.empty?
               if errors == false
                 $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                processo = stdout.chomp
+                stdout,stderr,status = Open3.capture3($pokebot_stop1.gsub("<process>",processo))
+                stdout,stderr,status = Open3.capture3($pokebot_stop2.gsub("<process>",processo))
                 bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot stoppato per l'utente #{stoppami}!")
                 bot.api.send_message(chat_id: $notify, text: "PokeBot stoppato per l'utente #{stoppami} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
               else
