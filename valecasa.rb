@@ -428,7 +428,7 @@ begin
           errors = true if !stderr.empty?
           if errors == false
             $log.info("Output: #{stdout.chomp}") if !stdout.empty?
-            if stdout == ""
+            if stdout.chomp == ""
               bot.api.send_message(chat_id: message.chat.id, text: "Nessun PokeBot avviato!")
             else
               $log.info("Eseguo comando #{$pokebot_checkrun2}")
@@ -439,7 +439,7 @@ begin
                 $log.info("Output: #{stdout.chomp}") if !stdout.empty?
                 messaggio = ""
                 array_p_choose = Array.new
-                array_p_choose = stdout.split(/\n/)
+                array_p_choose = stdout.chomp.split(/\n/)
                 conta = 1
                 array_p_choose.each do |riga|
                   messaggio += "#{conta.to_s}) #{riga}\n"
