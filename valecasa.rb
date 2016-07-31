@@ -770,9 +770,9 @@ begin
           elsif $bol_avvia_pokebot
             if message.text.to_i > 0 and message.text.to_i <= $conta_utenti_pokebot
               stdout,stderr,status = Open3.capture3($pokebot_utente_N.gsub("<number>",message.text))
-              pokebot_utente = stdout
+              pokebot_utente = stdout.chomp
               stdout,stderr,status = Open3.capture3($pokebot_checkrun_user.gsub("<utente>",pokebot_utente))
-              if stdout == ""
+              if stdout.chomp == ""
                 puts "Chiedo in quale città avviare il PokeBot per l'utente #{pokebot_utente} \n"
                 $log.info("Eseguo comando #{$pokebot_citta}")
                 errors = false
