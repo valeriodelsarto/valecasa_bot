@@ -83,7 +83,7 @@ $pokebot_utenti   = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v e
 $pokebot_utente_N = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $3}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
 $pokebot_citta    = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq'
 $pokebot_citta_N  = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
-$pokebot_avvia    = '/usr/bin/nohup /opt/PokemonGo-Bot/<utente>.sh <citta> &> /opt/PokemonGo-Bot/log/<utente>.log &'
+$pokebot_avvia    = '/usr/bin/nohup /opt/PokemonGo-Bot/<utente>.sh <citta> &> /opt/PokemonGo-Bot/log/<utente>.log'
 $pokebot_checkrun_user = '/bin/ps a | /bin/grep \'python ./pokecli.py --config config.json.<utente>\' | /bin/grep -v grep'
 $pokebot_checkrun = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep'
 $pokebot_checkrun2 = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\''
