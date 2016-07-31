@@ -90,8 +90,8 @@ $pokebot_checkrun2 = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep 
 $pokebot_checkrun_N = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\' | /usr/bin/awk \'NR == <number>\''
 $pokebot_stop     = '/usr/bin/pkill <utente>'
 $pokebot_logpos   = nil
-$pokebot_logview1 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -c 4000 -n +2"
-$pokebot_logview2 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/awk '$0 > \"#{$pokebot_logpos}\"' | /usr/bin/tail -c 4000 -n +2"
+$pokebot_logview1 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
+$pokebot_logview2 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/awk '$0 > \"#{$pokebot_logpos}\"' | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
 $pokebot_loglast  = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -1 | /usr/bin/awk '{print $1\" \"$2}'"
 $pokebot_logcheck = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq'
 $pokebot_logcheck_N = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
