@@ -387,7 +387,7 @@ begin
           errors = true if !stderr.empty?
           if errors == false
             $log.info("Output: #{stdout.chomp}") if !stdout.empty?
-            if stdout == ""
+            if stdout.chomp == ""
               bot.api.send_message(chat_id: message.chat.id, text: "Nessun PokeBot avviato!")
               bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_stop completato!")
             else
