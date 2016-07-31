@@ -876,8 +876,12 @@ begin
               $pokebot_logpos = ultima_riga_log
               if errors == false
                 $log.info("Output: #{stdout.chomp}") if !stdout.empty?
-                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot Log dell'utente #{pokebot_utente}:")
-                bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+                if messaggio != ""
+                  bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot Log dell'utente #{pokebot_utente}:")
+                  bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+                else
+                  bot.api.send_message(chat_id: message.chat.id, text: "PokeBot Log dell'utente #{pokebot_utente} vuoto!")
+                end
               else
                 $log.error(stderr.chomp) if !stderr.empty?
                 bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
