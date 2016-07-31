@@ -803,6 +803,9 @@ begin
                 puts "Errore, il PokeBot per l'utente #{pokebot_utente} è già avviato! \n"
                 $log.info("Errore, il PokeBot per l'utente #{pokebot_utente} è già avviato!")
                 bot.api.send_message(chat_id: message.chat.id, text: "Errore, il PokeBot per l'utente #{pokebot_utente} è già avviato!")
+                bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start completato!")
+                $bol_avvia_pokebot = false
+                $conta_utenti_pokebot = 0
               end
             else
               puts "Numero errato utente da avviare su Pokebot: #{message.text} \n"
