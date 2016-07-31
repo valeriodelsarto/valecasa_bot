@@ -818,7 +818,7 @@ begin
               pokebot_citta = stdout.chomp
               puts "Avvio il PokeBot per l'utente #{$utente_pokebot} nella città: #{pokebot_citta} \n"
               $log.info("Eseguo comando #{$pokebot_avvia}")
-              system("#{$pokebot_avvia.gsub("<utente>",$utente_pokebot).gsub("<citta>",pokebot_citta)}&")
+              system("/usr/bin/nohup #{$pokebot_avvia.gsub("<utente>",$utente_pokebot).gsub("<citta>",pokebot_citta)}&")
               bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot avviato per l'utente #{$utente_pokebot} nella città: #{pokebot_citta}!")
               bot.api.send_message(chat_id: $notify, text: "PokeBot avviato per l'utente #{$utente_pokebot} nella città: #{pokebot_citta} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
             else
