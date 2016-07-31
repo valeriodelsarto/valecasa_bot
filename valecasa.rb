@@ -815,16 +815,16 @@ begin
           elsif $bol_citta_pokebot
             if message.text.to_i > 0 and message.text.to_i <= $conta_citta_pokebot
               stdout,stderr,status = Open3.capture3($pokebot_citta_N.gsub("<number>",message.text))
-              pokebot_citta = stdout
-              puts "Avvio il PokeBot per l'utente #{pokebot_utente} nella città: #{pokebot_citta} \n"
+              pokebot_citta = stdout.chomp
+              puts "Avvio il PokeBot per l'utente #{$utente_pokebot} nella città: #{pokebot_citta} \n"
               $log.info("Eseguo comando #{$pokebot_avvia}")
               errors = false
-              stdout,stderr,status = Open3.capture3($pokebot_avvia.gsub("<utente>",pokebot_utente).gsub("<citta>",pokebot_citta))
+              stdout,stderr,status = Open3.capture3($pokebot_avvia.gsub("<utente>",$utente_pokebot).gsub("<citta>",pokebot_citta))
               errors = true if !stderr.empty?
               if errors == false
                 $log.info("Output: #{stdout.chomp}") if !stdout.empty?
-                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot avviato per l'utente #{pokebot_utente} nella città: #{pokebot_citta}!")
-                bot.api.send_message(chat_id: $notify, text: "PokeBot avviato per l'utente #{pokebot_utente} nella città: #{pokebot_citta} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot avviato per l'utente #{$utente_pokebot} nella città: #{pokebot_citta}!")
+                bot.api.send_message(chat_id: $notify, text: "PokeBot avviato per l'utente #{$utente_pokebot} nella città: #{pokebot_citta} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
               else
                 $log.error(stderr.chomp) if !stderr.empty?
                 bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
@@ -840,7 +840,7 @@ begin
           elsif $bol_ferma_pokebot
             if message.text.to_i > 0 and message.text.to_i <= $conta_ferma_pokebot
               stdout,stderr,status = Open3.capture3($pokebot_checkrun_N.gsub("<number>",message.text))
-              stoppami = stdout.slice(0,stdout.index(" "))
+              stoppami = stdout.chomp.slice(0,stdout.index(" "))
               puts "Fermo il PokeBot per l'utente #{stoppami} \n"
               $log.info("Eseguo comando #{$pokebot_stop}")
               errors = false
