@@ -1,4 +1,4 @@
-$Version = "1.0.2"
+$Version = "1.0.3"
 
 $token_file = '/opt/valecasa_bot_telegram.token'
 $downl_pass = IO.read('/opt/valecasa_bot_telegram.pass').chomp
@@ -77,6 +77,34 @@ $kodi_msg_t      = nil
 
 $cisco_bandwidth_cmd   = '/home/kodi/.kodi/dev/ruby/telegram_bot/cisco_graph.sh'
 $cisco_bandwidth_graph = '/home/kodi/.kodi/dev/ruby/telegram_bot/graphs/cisco.png'
+
+#PokemonGo-Bot
+$pokebot_utenti   = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $3}\' | /usr/bin/sort | /usr/bin/uniq'
+$pokebot_utente_N = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $3}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
+$pokebot_citta    = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq'
+$pokebot_citta_N  = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
+$pokebot_avvia    = '/usr/bin/nohup /opt/PokemonGo-Bot/<utente>.sh <citta> &> /opt/PokemonGo-Bot/log/<utente>.log &'
+$pokebot_checkrun_user = '/usr/bin/pgrep -f \'python ./pokecli.py --config config.json.<utente>\''
+$pokebot_checkrun = '/usr/bin/pgrep -f \'python ./pokecli.py\''
+$pokebot_checkrun2 = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\''
+$pokebot_checkrun_N = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\' | /usr/bin/awk \'NR == <number>\''
+$pokebot_stop     = '/usr/bin/pkill <utente>'
+$pokebot_logpos   = nil
+$pokebot_logview1 = "/bin/grep 'Captured\|Spinning\|Total\|appeared\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -c 4090 -n +2"
+$pokebot_logview2 = "/bin/grep 'Captured\|Spinning\|Total\|appeared\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/awk '$0 > \"#{$pokebot_logpos}\"' | /usr/bin/tail -c 4090 -n +2"
+$pokebot_loglast  = "/bin/grep 'Captured\|Spinning\|Total\|appeared\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -1 | /usr/bin/awk '{print $1\" \"$2}'"
+$pokebot_logcheck = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq'
+$pokebot_logcheck_N = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
+
+$bol_avvia_pokebot    = false
+$bol_citta_pokebot    = false
+$bol_ferma_pokebot    = false
+$bol_log_pokebot      = false
+$conta_utenti_pokebot = 0
+$conta_citta_pokebot  = 0
+$conta_ferma_pokebot  = 0
+$conta_log_pokebot    = 0
+$utente_pokebot       = nil
 
 def local_log
   logfile="valecasa_bot.log"
