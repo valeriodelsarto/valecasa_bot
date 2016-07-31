@@ -142,7 +142,7 @@ begin
                 conta += 1
               end
               $bol_muovi_1 = true
-              $conta_muovi_e = conta
+              $conta_muovi_e = conta - 1
               bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale file vuoi muovere?")
               bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
             else
@@ -170,7 +170,7 @@ begin
                 conta += 1
               end
               $bol_muovi_2 = true
-              $conta_muovi_t = conta
+              $conta_muovi_t = conta - 1
               bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale file vuoi muovere?")
               bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
             else
@@ -291,7 +291,7 @@ begin
               conta += 1
             end
             $bol_rimuovi_1 = true
-            $conta_down_e = conta
+            $conta_down_e = conta - 1
             bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale download vuoi eliminare?")
             bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
           else
@@ -315,7 +315,7 @@ begin
               conta += 1
             end
             $bol_rimuovi_2 = true
-            $conta_down_t = conta
+            $conta_down_t = conta - 1
             bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale download vuoi eliminare?")
             bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
           else
@@ -371,7 +371,7 @@ begin
               conta += 1
             end
             $bol_avvia_pokebot = true
-            $conta_utenti_pokebot = conta
+            $conta_utenti_pokebot = conta - 1
             bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale utente vuoi avviare?")
             bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
           else
@@ -406,7 +406,7 @@ begin
                   conta += 1
                 end
                 $bol_ferma_pokebot = true
-                $conta_ferma_pokebot = conta
+                $conta_ferma_pokebot = conta - 1
                 bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale PokeBot vuoi fermare?")
                 bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
               else
@@ -478,7 +478,7 @@ begin
                 conta += 1
               end
               $bol_log_pokebot = true
-              $conta_log_pokebot = conta
+              $conta_log_pokebot = conta - 1
               bot.api.send_message(chat_id: message.chat.id, text: "Quale log di PokeBot vuoi consultare?")
               bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
             end
@@ -790,7 +790,7 @@ begin
                   end
                   $bol_avvia_pokebot = false
                   $bol_citta_pokebot = true
-                  $conta_citta_pokebot = conta
+                  $conta_citta_pokebot = conta - 1
                   $conta_utenti_pokebot = 0
                   $utente_pokebot = pokebot_utente
                   bot.api.send_message(chat_id: message.chat.id, text: "OK!\nIn quale città vuoi avviare l'utente #{pokebot_utente}?")
