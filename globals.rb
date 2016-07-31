@@ -88,7 +88,7 @@ $pokebot_checkrun_user = '/usr/bin/pgrep -f \'python ./pokecli.py --config confi
 $pokebot_checkrun = '/usr/bin/pgrep -f \'python ./pokecli.py\''
 $pokebot_checkrun2 = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\''
 $pokebot_checkrun_N = '/bin/ps a | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\' | /usr/bin/awk \'NR == <number>\''
-$pokebot_stop     = '/usr/bin/pkill <utente>'
+$pokebot_stop     = '/usr/bin/pkill -P <utente>'
 $pokebot_logpos   = nil
 $pokebot_logview1 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
 $pokebot_logview2 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/awk '$0 > \"#{$pokebot_logpos}\"' | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
