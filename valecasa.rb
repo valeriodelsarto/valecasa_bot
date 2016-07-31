@@ -865,8 +865,8 @@ begin
           elsif $bol_log_pokebot
             if message.text.to_i > 0 and message.text.to_i <= $conta_log_pokebot
               stdout,stderr,status = Open3.capture3($pokebot_logcheck_N.gsub("<number>",message.text))
-              pokebot_utente = stdout
-              puts "Leggo il Log del PokeBot dell'utente #{stdout} \n"
+              pokebot_utente = stdout.chomp
+              puts "Leggo il Log del PokeBot dell'utente #{pokebot_utente} \n"
               errors = false
               messaggio = ""
               if $pokebot_logpos == nil
