@@ -84,17 +84,17 @@ $pokebot_utente_N = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v e
 $pokebot_citta    = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq'
 $pokebot_citta_N  = '/bin/ls -1 /opt/PokemonGo-Bot/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
 $pokebot_avvia    = '/opt/PokemonGo-Bot/<utente>.sh <citta>'
-$pokebot_checkrun_user = '/bin/ps ax | /bin/grep \'python ./pokecli.py --config config.json.<utente>\' | /bin/grep -v grep'
-$pokebot_checkrun = '/bin/ps ax | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep'
-$pokebot_checkrun2 = '/bin/ps ax | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\''
-$pokebot_checkrun_N = '/bin/ps ax | /bin/grep \'python ./pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\' | /usr/bin/awk \'NR == <number>\''
+$pokebot_checkrun_user = '/bin/ps ax | /bin/grep \'python pokecli.py -cf configs/config.json.<utente>\' | /bin/grep -v grep'
+$pokebot_checkrun = '/bin/ps ax | /bin/grep \'python pokecli.py\' | /bin/grep -v grep'
+$pokebot_checkrun2 = '/bin/ps ax | /bin/grep \'python pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\''
+$pokebot_checkrun_N = '/bin/ps ax | /bin/grep \'python pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\' | /usr/bin/awk \'NR == <number>\''
 $pokebot_stop     = '/usr/bin/pgrep <utente>'
 $pokebot_stop1    = '/usr/bin/pkill -TERM -P <process>'
 $pokebot_stop2    = '/bin/kill <process>'
 $pokebot_logpos   = nil
-$pokebot_logview1 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
-$pokebot_logview2 = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/awk '$0 > \"#{$pokebot_logpos}\"' | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
-$pokebot_loglast  = "/bin/grep 'Captured\\|Spinning\\|Total\\|appeared\\|exchanged' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -1 | /usr/bin/awk '{print $1\" \"$2}'"
+$pokebot_logview1 = "/bin/grep 'Captured\\|Pokestop\\|Total\\|appeared\\|Releasing\\|Exchanging\\|Discarded\\|Nickname\\|hatches' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
+$pokebot_logview2 = "/bin/grep 'Captured\\|Pokestop\\|Total\\|appeared\\|Releasing\\|Exchanging\\|Discarded\\|Nickname\\|hatches' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/awk '$0 > \"#{$pokebot_logpos}\"' | /usr/bin/tail -c 4090 | /usr/bin/tail -n +2"
+$pokebot_loglast  = "/bin/grep 'Captured\\|Pokestop\\|Total\\|appeared\\|Releasing\\|Exchanging\\|Discarded\\|Nickname\\|hatches' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -1 | /usr/bin/awk '{print $1\" \"$2}'"
 $pokebot_logcheck = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq'
 $pokebot_logcheck_N = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
 
