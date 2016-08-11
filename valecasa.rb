@@ -487,6 +487,56 @@ begin
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_log completato!")
           end
+        when '/poke_nomi'
+          puts "Ricevuto messaggio /poke_nomi \n"
+          $log.info("Eseguo comando #{$pokebot_pokemon_inventari}")
+          errors = false
+          stdout,stderr,status = Open3.capture3($pokebot_pokemon_inventari)
+          errors = true if !stderr.empty?
+          if errors == false
+            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+            messaggio = ""
+            array_p_choose = Array.new
+            array_p_choose = stdout.split(/\n/)
+            conta = 1
+            array_p_choose.each do |riga|
+              messaggio += "#{conta.to_s}) #{riga}\n"
+              conta += 1
+            end
+            $bol_nomi_pokebot = true
+            $conta_nomi_pokebot = conta - 1
+            bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale utente vuoi consultare?")
+            bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+          else
+            $log.error(stderr.chomp) if !stderr.empty?
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_nomi completato!")
+          end
+        when '/poke_conta'
+          puts "Ricevuto messaggio /poke_conta \n"
+          $log.info("Eseguo comando #{$pokebot_pokemon_inventari}")
+          errors = false
+          stdout,stderr,status = Open3.capture3($pokebot_pokemon_inventari)
+          errors = true if !stderr.empty?
+          if errors == false
+            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+            messaggio = ""
+            array_p_choose = Array.new
+            array_p_choose = stdout.split(/\n/)
+            conta = 1
+            array_p_choose.each do |riga|
+              messaggio += "#{conta.to_s}) #{riga}\n"
+              conta += 1
+            end
+            $bol_conta_pokebot = true
+            $conta_conta_pokebot = conta - 1
+            bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale utente vuoi consultare?")
+            bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+          else
+            $log.error(stderr.chomp) if !stderr.empty?
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_conta completato!")
+          end
         else
           if $bol_aggiungi_1
             if (message.text =~ URI::regexp("ed2k"))
@@ -900,6 +950,68 @@ begin
             $bol_log_pokebot = false
             $conta_log_pokebot = 0
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_log completato!")
+          elsif $bol_nomi_pokebot
+            if message.text.to_i > 0 and message.text.to_i <= $conta_nomi_pokebot
+              stdout,stderr,status = Open3.capture3($pokebot_pokemon_inventari_N.gsub("<number>",message.text))
+              pokebot_utente = stdout.chomp
+              puts "Leggo l'inventario PokeBot dell'utente #{pokebot_utente} \n"
+              errors = false
+              messaggio = ""
+              $log.info("Eseguo comando #{$pokebot_pokemon_nomi}")
+              stdout,stderr,status = Open3.capture3($pokebot_pokemon_nomi.gsub("<inventario>",pokebot_utente))
+              messaggio = stdout.chomp
+              errors = true if !stderr.empty?
+              if errors == false
+                $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                if messaggio != ""
+                  bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot Nomi Pokemon dell'utente #{pokebot_utente}:")
+                  bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+                else
+                  bot.api.send_message(chat_id: message.chat.id, text: "PokeBot Nomi Pokemon dell'utente #{pokebot_utente} vuoto!")
+                end
+              else
+                $log.error(stderr.chomp) if !stderr.empty?
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+              end
+            else
+              puts "Numero errato utente PokeBot da consultare: #{message.text} \n"
+              $log.info("Numero errato utente PokeBot da consultare: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Numero inventario utente di PokeBot da consultare errato! Deve essere un numero compreso fra 1 e #{$conta_nomi_pokebot}!")
+            end
+            $bol_nomi_pokebot = false
+            $conta_nomi_pokebot = 0
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_nomi completato!")
+          elsif $bol_conta_pokebot
+            if message.text.to_i > 0 and message.text.to_i <= $conta_conta_pokebot
+              stdout,stderr,status = Open3.capture3($pokebot_pokemon_inventari_N.gsub("<number>",message.text))
+              pokebot_utente = stdout.chomp
+              puts "Leggo l'inventario PokeBot dell'utente #{pokebot_utente} \n"
+              errors = false
+              messaggio = ""
+              $log.info("Eseguo comando #{$pokebot_pokemon_conta}")
+              stdout,stderr,status = Open3.capture3($pokebot_pokemon_conta.gsub("<inventario>",pokebot_utente))
+              messaggio = stdout.chomp
+              errors = true if !stderr.empty?
+              if errors == false
+                $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                if messaggio != ""
+                  bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot Conta Pokemon dell'utente #{pokebot_utente}:")
+                  bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+                else
+                  bot.api.send_message(chat_id: message.chat.id, text: "PokeBot Conta Pokemon dell'utente #{pokebot_utente} vuoto!")
+                end
+              else
+                $log.error(stderr.chomp) if !stderr.empty?
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+              end
+            else
+              puts "Numero errato utente PokeBot da consultare: #{message.text} \n"
+              $log.info("Numero errato utente PokeBot da consultare: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Numero inventario utente di PokeBot da consultare errato! Deve essere un numero compreso fra 1 e #{$conta_conta_pokebot}!")
+            end
+            $bol_conta_pokebot = false
+            $conta_conta_pokebot = 0
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_conta completato!")
           else
             puts "Ricevuto messaggio #{message.text} \n"
             bot.api.send_message(chat_id: message.chat.id, text: "Comando non riconosciuto!")

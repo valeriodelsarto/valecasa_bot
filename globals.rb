@@ -97,15 +97,23 @@ $pokebot_logview2 = "/bin/grep 'Captured\\|awarded\\|Total\\|appeared\\|Releasin
 $pokebot_loglast  = "/bin/grep 'Captured\\|awarded\\|Total\\|appeared\\|Releasing\\|Exchanged\\|Discarded\\|renamed\\|reward\\|incubates\\|hatched\\|Incubating' /opt/PokemonGo-Bot/log/<utente>.log | /usr/bin/tail -1 | /usr/bin/awk '{print $1\" \"$2}'"
 $pokebot_logcheck = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq'
 $pokebot_logcheck_N = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F\'/\' \'{print $5}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
+$pokebot_pokemon_inventari = "/bin/ls -1 /opt/PokemonGo-Bot/web/inventory-*.json | /usr/bin/awk -F'-' '{print $3}' | /usr/bin/rev | /usr/bin/cut -c 6- | /usr/bin/rev"
+$pokebot_pokemon_inventari_N = "/bin/ls -1 /opt/PokemonGo-Bot/web/inventory-*.json | /usr/bin/awk -F'-' '{print $3}' | /usr/bin/rev | /usr/bin/cut -c 6- | /usr/bin/rev | /usr/bin/awk 'NR == <number>'"
+$pokebot_pokemon_nomi = "/usr/bin/jq '.[] | .inventory_item_data.pokemon_data.nickname' <inventario> | /bin/grep -v null | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/sort | /bin/sed ':a;N;$!ba;s/\\n/, /g'"
+$pokebot_pokemon_conta = "/usr/bin/jq '.[] | .inventory_item_data.pokemon_data.nickname' <inventario> | /bin/grep -v null | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/sort | /usr/bin/wc -l"
 
 $bol_avvia_pokebot    = false
 $bol_citta_pokebot    = false
 $bol_ferma_pokebot    = false
 $bol_log_pokebot      = false
+$bol_nomi_pokebot     = false
+$bol_conta_pokebot    = false
 $conta_utenti_pokebot = 0
 $conta_citta_pokebot  = 0
 $conta_ferma_pokebot  = 0
 $conta_log_pokebot    = 0
+$conta_nomi_pokebot   = 0
+$conta_conta_pokebot  = 0
 $utente_pokebot       = nil
 
 def local_log
