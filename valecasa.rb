@@ -1116,6 +1116,23 @@ begin
             $bol_conta_pokebot = false
             $conta_conta_pokebot = 0
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_conta completato!")
+          elsif $bol_avvia_pokemap
+            if message.text.to_i > 0 and message.text.to_i <= $conta_citta_pokemap
+              stdout,stderr,status = Open3.capture3($pokebot_citta_N.gsub("<number>",message.text))
+              pokemap_citta = stdout.chomp
+              puts "Avvio la PokeMap nella città: #{pokemap_citta} \n"
+              $log.info("Eseguo comando #{$pokemap_avvia}")
+              system("#{$pokemap_avvia.gsub("<citta>",pokemap_citta)} > /opt/PokemonGo-Map/log/#{pokemap_citta}.log 2>&1 &")
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap avviata nella città: #{pokemap_citta}!")
+              bot.api.send_message(chat_id: $notify, text: "PokeMap avviata nella città: #{pokemap_citta} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+            else
+              puts "Numero errato città PokeMap da avviare: #{message.text} \n"
+              $log.info("Numero errato città PokeMap da avviare: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Numero città errato! Deve essere un numero compreso fra 1 e #{$conta_citta_pokemap}!")
+            end
+            $bol_avvia_pokemap = false
+            $conta_citta_pokemap = 0
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_start completato!")
           else
             puts "Ricevuto messaggio #{message.text} \n"
             bot.api.send_message(chat_id: message.chat.id, text: "Comando non riconosciuto!")
