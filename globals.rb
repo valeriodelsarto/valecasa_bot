@@ -1,4 +1,4 @@
-$Version = "1.0.3"
+$Version = "1.0.4"
 
 $token_file = '/opt/valecasa_bot_telegram.token'
 $downl_pass = IO.read('/opt/valecasa_bot_telegram.pass').chomp
@@ -118,6 +118,16 @@ $conta_log_pokebot    = 0
 $conta_nomi_pokebot   = 0
 $conta_conta_pokebot  = 0
 $utente_pokebot       = nil
+
+$pokemap_avvia     = '/opt/PokemonGo-Map/mappa.sh <citta>'
+$pokemap_stop      = '/usr/bin/pgrep mappa.sh'
+$pokemap_stop1     = '/usr/bin/pkill -TERM -P <process>'
+$pokemap_stop2     = '/bin/kill <process>'
+$pokemap_checkrun  = '/bin/ps ax | /bin/grep \'python runserver.py\' | /bin/grep -v grep'
+$pokemap_getcoord  = '/bin/ps ax | /bin/grep \'python runserver.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $14}\''
+
+$bol_avvia_pokemap    = false
+$conta_citta_pokemap  = 0
 
 def local_log
   logfile="valecasa_bot.log"

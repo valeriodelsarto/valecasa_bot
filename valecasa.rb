@@ -537,6 +537,110 @@ begin
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_conta completato!")
           end
+        when '/pokemap_start'
+          puts "Ricevuto messaggio /pokemap_start \n"
+          $log.info("Eseguo comando #{$pokemap_checkrun}")
+          errors = false
+          stdout,stderr,status = Open3.capture3($pokemap_checkrun)
+          errors = true if !stderr.empty?
+          if errors == false
+            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+            if stdout.chomp == ""
+              $log.info("Eseguo comando #{$pokebot_citta}")
+              errors = false
+              stdout,stderr,status = Open3.capture3($pokebot_citta)
+              errors = true if !stderr.empty?
+              if errors == false
+                $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                messaggio = ""
+                array_p_choose = Array.new
+                array_p_choose = stdout.split(/\n/)
+                conta = 1
+                array_p_choose.each do |riga|
+                  messaggio += "#{conta.to_s}) #{riga}\n"
+                  conta += 1
+                end
+                $bol_avvia_pokemap = true
+                $conta_citta_pokemap = conta - 1
+                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale mappa della città vuoi avviare?")
+                bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+              else
+                $log.error(stderr.chomp) if !stderr.empty?
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+                bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_start completato!")
+              end
+            else
+              $log.info("Eseguo comando #{$pokemap_getcoord}")
+              stdout,stderr,status = Open3.capture3($pokemap_getcoord)
+              coordinate = stdout.chomp
+              citta = Dir.entries("/opt/PokemonGo-Bot/configs/citta").select {|f| next if File.directory?(f); !File.foreach("/opt/PokemonGo-Bot/configs/citta/#{f}").grep(/#{coordinate}/).empty?}[0]
+              bot.api.send_message(chat_id: message.chat.id, text: "PokeMap già avviata nella città: #{citta.chomp}!")
+              bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_start completato!")
+            end
+          else
+            $log.error(stderr.chomp) if !stderr.empty?
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_start completato!")
+          end
+        when '/pokemap_stop'
+          puts "Ricevuto messaggio /pokemap_stop \n"
+          $log.info("Eseguo comando #{$pokemap_checkrun}")
+          errors = false
+          stdout,stderr,status = Open3.capture3($pokemap_checkrun)
+          errors = true if !stderr.empty?
+          if errors == false
+            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+            if stdout.chomp == ""
+              bot.api.send_message(chat_id: message.chat.id, text: "Nessuna PokeMap avviata!")
+              bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_stop completato!")
+            else
+              $log.info("Eseguo comando #{$pokemap_getcoord}")
+              stdout,stderr,status = Open3.capture3($pokemap_getcoord)
+              coordinate = stdout.chomp
+              citta = Dir.entries("/opt/PokemonGo-Bot/configs/citta").select {|f| next if File.directory?(f); !File.foreach("/opt/PokemonGo-Bot/configs/citta/#{f}").grep(/#{coordinate}/).empty?}[0]
+              $log.info("Eseguo comando #{$pokemap_stop}")
+              errors = false
+              stdout,stderr,status = Open3.capture3($pokemap_stop)
+              errors = true if !stderr.empty?
+              if errors == false
+                $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                processo = stdout.chomp
+                stdout,stderr,status = Open3.capture3($pokemap_stop1.gsub("<process>",processo))
+                stdout,stderr,status = Open3.capture3($pokemap_stop2.gsub("<process>",processo))
+                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} stoppata!")
+                bot.api.send_message(chat_id: $notify, text: "PokeMap città #{citta} stoppata da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+              else
+                $log.error(stderr.chomp) if !stderr.empty?
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+              end
+            end
+          else
+            $log.error(stderr.chomp) if !stderr.empty?
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_stop completato!")
+          end
+        when '/pokemap_status'
+          puts "Ricevuto messaggio /pokemap_status \n"
+          $log.info("Eseguo comando #{$pokemap_checkrun}")
+          errors = false
+          stdout,stderr,status = Open3.capture3($pokemap_checkrun)
+          errors = true if !stderr.empty?
+          if errors == false
+            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+            if stdout.chomp == ""
+              bot.api.send_message(chat_id: message.chat.id, text: "Nessuna PokeMap avviata!")
+            else
+              $log.info("Eseguo comando #{$pokemap_getcoord}")
+              stdout,stderr,status = Open3.capture3($pokemap_getcoord)
+              coordinate = stdout.chomp
+              citta = Dir.entries("/opt/PokemonGo-Bot/configs/citta").select {|f| next if File.directory?(f); !File.foreach("/opt/PokemonGo-Bot/configs/citta/#{f}").grep(/#{coordinate}/).empty?}[0]
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} attiva!")
+            end
+          else
+            $log.error(stderr.chomp) if !stderr.empty?
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+          end
+          bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_status completato!")
         else
           if $bol_aggiungi_1
             if (message.text =~ URI::regexp("ed2k"))
