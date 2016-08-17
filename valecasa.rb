@@ -642,6 +642,31 @@ begin
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
           end
           bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_status completato!")
+        when '/pokemap_show'
+          puts "Ricevuto messaggio /pokemap_show \n"
+          $log.info("Eseguo comando #{$pokemap_checkrun}")
+          errors = false
+          stdout,stderr,status = Open3.capture3($pokemap_checkrun)
+          errors = true if !stderr.empty?
+          if errors == false
+            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+            if stdout.chomp == ""
+              $bol_mostra_mappa = true
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\nMandami le coordinate di cui vuoi visualizzare la mappa! (Esempio: 43.7126865,10.9467945)")
+            else
+              $log.info("Eseguo comando #{$pokemap_getcoord}")
+              stdout,stderr,status = Open3.capture3($pokemap_getcoord)
+              coordinate = stdout.chomp
+              citta = Dir.entries("/opt/PokemonGo-Bot/configs/citta").select {|f| next if File.directory?(f); !File.foreach("/opt/PokemonGo-Bot/configs/citta/#{f}").grep(/#{coordinate}/).empty?}[0]
+              bot.api.send_message(chat_id: message.chat.id, text: "Non posso visualizzare la mappa perché la PokeMap è già avviata nella città: #{citta.chomp}!")
+              bot.api.send_message(chat_id: message.chat.id, text: "Vuoi visualizzare la mappa di questa città alle coordinate attuali #{coordinate}? (S/N)")
+              $bol_mostra_mappa_attiva = true
+            end
+          else
+            $log.error(stderr.chomp) if !stderr.empty?
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_show completato!")
+          end
         else
           if $bol_aggiungi_1
             if (message.text =~ URI::regexp("ed2k"))
@@ -1122,7 +1147,7 @@ begin
               stdout,stderr,status = Open3.capture3($pokebot_citta_N.gsub("<number>",message.text))
               pokemap_citta = stdout.chomp
               puts "Avvio la PokeMap nella città: #{pokemap_citta} \n"
-              $log.info("Eseguo comando #{$pokemap_avvia}")
+              $log.info("Eseguo comando #{$pokemap_avvia.gsub("<citta>",pokemap_citta)}")
               system("#{$pokemap_avvia.gsub("<citta>",pokemap_citta)} > /opt/PokemonGo-Map/log/#{pokemap_citta}.log 2>&1 &")
               bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap avviata nella città: #{pokemap_citta}!")
               bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: http://192.168.1.6:8080/map/")
@@ -1135,6 +1160,54 @@ begin
             $bol_avvia_pokemap = false
             $conta_citta_pokemap = 0
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_start completato!")
+          elsif $bol_mostra_mappa
+            if (message.text.delete(' ') =~ /^[0-9]{2}\.[0-9]*\,[0-9]{2}\.[0-9]*$/)
+              bot.api.send_message(chat_id: message.chat.id, text: "OK! Carico la mappa e genero l'immagine, mi serve qualche secondo...")
+              puts "Avvio la PokeMap alle coordinate: #{message.text.delete(' ')} \n"
+              $log.info("Eseguo comando #{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' ')}")
+              system("#{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' ')} > /opt/PokemonGo-Map/log/#{message.text.delete(' ')}.log 2>&1 &")
+              sleep 10
+              system("#{$pokemap_salvaimg}")
+              puts "Invio l'immagine della PokeMap \n"
+              bot.api.send_photo(chat_id: message.chat.id, photo: Faraday::UploadIO.new('/home/kodi/.kodi/dev/ruby/telegram_bot/graphs/pokemap.png', 'image/png'))
+              bot.api.send_message(chat_id: $notify, text: "Eseguito upload mappa PokeMap da #{message.from.id} - #{message.from.first_name}") if message.from.id != $notify
+              bot.api.send_photo(chat_id: $notify, photo: Faraday::UploadIO.new('/home/kodi/.kodi/dev/ruby/telegram_bot/graphs/pokemap.png', 'image/png')) if message.from.id != $notify
+              puts "Fermo la PokeMap \n"
+              $log.info("Eseguo comando #{$pokemap_stop_coord}")
+              errors = false
+              stdout,stderr,status = Open3.capture3($pokemap_stop_coord)
+              errors = true if !stderr.empty?
+              if errors == false
+                $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                processo = stdout.chomp
+                stdout,stderr,status = Open3.capture3($pokemap_stop1.gsub("<process>",processo))
+                stdout,stderr,status = Open3.capture3($pokemap_stop2.gsub("<process>",processo))
+              else
+                $log.error(stderr.chomp) if !stderr.empty?
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore nello stop della PokeMap!\n#{stderr.chomp}")
+              end
+            else
+              puts "Non hai inviato delle coordinate da visualizzare: #{message.text} \n"
+              $log.info("Non hai inviato delle coordinate da visualizzare: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Non hai inviato delle coordinate da visualizzare! Esempio: 43.7197133,10.947627")
+            end
+            $bol_mostra_mappa = false
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_show completato!")
+          elsif $bol_mostra_mappa_attiva
+            if message.text == "S" or message.text == "s" or message.text == "Y" or message.text == "y"
+              bot.api.send_message(chat_id: message.chat.id, text: "OK! Genero l'immagine...")
+              system("#{$pokemap_salvaimg}")
+              puts "Invio l'immagine della PokeMap \n"
+              bot.api.send_photo(chat_id: message.chat.id, photo: Faraday::UploadIO.new('/home/kodi/.kodi/dev/ruby/telegram_bot/graphs/pokemap.png', 'image/png'))
+              bot.api.send_message(chat_id: $notify, text: "Eseguito upload mappa PokeMap da #{message.from.id} - #{message.from.first_name}") if message.from.id != $notify
+              bot.api.send_photo(chat_id: $notify, photo: Faraday::UploadIO.new('/home/kodi/.kodi/dev/ruby/telegram_bot/graphs/pokemap.png', 'image/png')) if message.from.id != $notify
+            else
+              puts "Risposta negativa mappa attuale da visualizzare: #{message.text} \n"
+              $log.info("Risposta negativa mappa attuale da visualizzare: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Ok, non visualizzo nessuna mappa attuale!")
+            end
+            $bol_mostra_mappa_attiva = false
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_show completato!")
           else
             puts "Ricevuto messaggio #{message.text} \n"
             bot.api.send_message(chat_id: message.chat.id, text: "Comando non riconosciuto!")
