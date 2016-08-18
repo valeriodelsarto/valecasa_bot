@@ -1193,9 +1193,9 @@ begin
             end
             unless coordinate == ""
               bot.api.send_message(chat_id: message.chat.id, text: "OK! Carico la mappa, mi serve qualche secondo...")
-              puts "Avvio la PokeMap alle coordinate: #{message.text.delete(' ')} \n"
-              $log.info("Eseguo comando #{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' '))}")
-              system("#{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' '))} > /opt/PokemonGo-Map/log/#{message.text.delete(' ')}.log 2>&1 &")
+              puts "Avvio la PokeMap alle coordinate: #{coordinate} \n"
+              $log.info("Eseguo comando #{$pokemap_avvia_coord.gsub("<coord>",coordinate)}")
+              system("#{$pokemap_avvia_coord.gsub("<coord>",coordinate)} > /opt/PokemonGo-Map/log/#{coordinate}.log 2>&1 &")
               sleep 10
               ###############################################################
               # il caricamento dell'immagine della mappa attiva non funziona
