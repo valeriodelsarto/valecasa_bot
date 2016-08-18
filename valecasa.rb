@@ -1164,8 +1164,8 @@ begin
             if (message.text.delete(' ') =~ /^[0-9]{2}\.[0-9]*\,[0-9]{2}\.[0-9]*$/)
               bot.api.send_message(chat_id: message.chat.id, text: "OK! Carico la mappa e genero l'immagine, mi serve qualche secondo...")
               puts "Avvio la PokeMap alle coordinate: #{message.text.delete(' ')} \n"
-              $log.info("Eseguo comando #{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' ')}")
-              system("#{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' ')} > /opt/PokemonGo-Map/log/#{message.text.delete(' ')}.log 2>&1 &")
+              $log.info("Eseguo comando #{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' '))}")
+              system("#{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' '))} > /opt/PokemonGo-Map/log/#{message.text.delete(' ')}.log 2>&1 &")
               sleep 10
               system("#{$pokemap_salvaimg}")
               puts "Invio l'immagine della PokeMap \n"
