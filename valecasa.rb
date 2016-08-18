@@ -1184,7 +1184,7 @@ begin
               puts "Avvio la PokeMap alle coordinate: #{message.text.delete(' ')} \n"
               $log.info("Eseguo comando #{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' '))}")
               system("#{$pokemap_avvia_coord.gsub("<coord>",message.text.delete(' '))} > /opt/PokemonGo-Map/log/#{message.text.delete(' ')}.log 2>&1 &")
-              sleep 5
+              sleep 10
               ###############################################################
               # il caricamento dell'immagine della mappa attiva non funziona
               ###############################################################
@@ -1211,7 +1211,7 @@ begin
               ###############################################################
               bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap avviata alle coordinate: #{coordinate}!")
               bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: https://pegasus78.ddns.net/map/")
-              bot.api.send_message(chat_id: $notify, text: "PokeMap avviata alle coordinate: #{coordinate} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+              bot.api.send_message(chat_id: $notify, text: "PokeMap avviata alle coordinate: #{coordinate} da #{message.from.id} - #{message.from.first_name}") if message.from.id != $notify
             end
             $bol_mostra_mappa = false
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_show completato!")
@@ -1245,6 +1245,7 @@ begin
           bot.api.send_message(chat_id: message.chat.id, text: "Ciao #{message.from.first_name}, il tuo ID è #{message.from.id}, la chat ID è #{message.chat.id}")
         else
           bot.api.send_message(chat_id: message.chat.id, text: "Unauthorized!")
+          bot.api.send_message(chat_id: $notify, text: "Ricevuto messaggio non autorizzato da #{message.from.id} - #{message.from.first_name}, il messaggio era: #{message.text}")
         end
       end
     end
