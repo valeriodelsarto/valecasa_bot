@@ -617,8 +617,8 @@ begin
           else
             $log.error(stderr.chomp) if !stderr.empty?
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
-            bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_stop completato!")
           end
+          bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_stop completato!")
         when '/pokemap_status'
           puts "Ricevuto messaggio /pokemap_status \n"
           $log.info("Eseguo comando #{$pokemap_checkrun}")
