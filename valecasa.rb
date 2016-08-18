@@ -1181,7 +1181,7 @@ begin
             # verifico se il messaggio contiene delle coordinate
             coordinate = ""
             if message.location
-              coordinate = message.location.latitude + "," + message.location.longitude
+              coordinate = message.location.latitude.to_s + "," + message.location.longitude.to_s
             else
               if (message.text.delete(' ') =~ /^[0-9]{2}\.[0-9]*\,[0-9]{2}\.[0-9]*$/)
                 coordinate = message.text.delete(' ')
