@@ -647,7 +647,7 @@ begin
               coordinate = stdout.chomp
               citta = Dir.entries("/opt/PokemonGo-Bot/configs/citta").select {|f| next if File.directory?(f); !File.foreach("/opt/PokemonGo-Bot/configs/citta/#{f}").grep(/#{coordinate}/).empty?}[0]
               bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} attiva!")
-              bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: http://192.168.1.6:8080/map/")
+              bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: https://pegasus78.ddns.net/map/")
             end
           else
             $log.error(stderr.chomp) if !stderr.empty?
@@ -1167,7 +1167,7 @@ begin
               $log.info("Eseguo comando #{$pokemap_avvia.gsub("<citta>",pokemap_citta)}")
               system("#{$pokemap_avvia.gsub("<citta>",pokemap_citta)} > /opt/PokemonGo-Map/log/#{pokemap_citta}.log 2>&1 &")
               bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap avviata nella città: #{pokemap_citta}!")
-              bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: http://192.168.1.6:8080/map/")
+              bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: https://pegasus78.ddns.net/map/")
               bot.api.send_message(chat_id: $notify, text: "PokeMap avviata nella città: #{pokemap_citta} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
             else
               puts "Numero errato città PokeMap da avviare: #{message.text} \n"
