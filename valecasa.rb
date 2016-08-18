@@ -604,11 +604,23 @@ begin
               errors = true if !stderr.empty?
               if errors == false
                 $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                if stdout.empty?
+                  $log.info("Eseguo comando #{$pokemap_stop_coord}")
+                  errors = false
+                  stdout,stderr,status = Open3.capture3($pokemap_stop_coord)
+                  errors = true if !stderr.empty?
+                  $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                end
                 processo = stdout.chomp
                 stdout,stderr,status = Open3.capture3($pokemap_stop1.gsub("<process>",processo))
                 stdout,stderr,status = Open3.capture3($pokemap_stop2.gsub("<process>",processo))
-                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} stoppata!")
-                bot.api.send_message(chat_id: $notify, text: "PokeMap città #{citta} stoppata da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+                unless citta == ""
+                  bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} stoppata!")
+                  bot.api.send_message(chat_id: $notify, text: "PokeMap città #{citta} stoppata da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+                else
+                  bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap coordinate #{coordinate} stoppata!")
+                  bot.api.send_message(chat_id: $notify, text: "PokeMap coordinate #{coordinate} stoppata da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+                end
               else
                 $log.error(stderr.chomp) if !stderr.empty?
                 bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
