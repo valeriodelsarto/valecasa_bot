@@ -103,7 +103,8 @@ $pokebot_logcheck_N = '/bin/ls -1 /opt/PokemonGo-Bot/log/*.log | /usr/bin/awk -F
 $pokebot_pokemon_inventari = "/bin/ls -1 /opt/PokemonGo-Bot/web/inventory-*.json | /usr/bin/awk -F'-' '{print $3}' | /usr/bin/rev | /usr/bin/cut -c 6- | /usr/bin/rev"
 $pokebot_pokemon_inventari_N = "/bin/ls -1 /opt/PokemonGo-Bot/web/inventory-*.json | /usr/bin/awk -F'-' '{print $3}' | /usr/bin/rev | /usr/bin/cut -c 6- | /usr/bin/rev | /usr/bin/awk 'NR == <number>'"
 $pokebot_pokemon_nomi = "/usr/bin/jq '.[] | .inventory_item_data.pokemon_data.nickname' /opt/PokemonGo-Bot/web/inventory-<inventario>.json | /bin/grep -v null | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/sort | /bin/sed ':a;N;$!ba;s/\\n/, /g'"
-$pokebot_pokemon_conta = "/usr/bin/jq '.[] | .inventory_item_data.pokemon_data.nickname' /opt/PokemonGo-Bot/web/inventory-<inventario>.json | /bin/grep -v null | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/sort | /usr/bin/wc -l"
+#$pokebot_pokemon_conta = "/usr/bin/jq '.[] | .inventory_item_data.pokemon_data.nickname' /opt/PokemonGo-Bot/web/inventory-<inventario>.json | /bin/grep -v null | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/sort | /usr/bin/wc -l"
+$pokebot_pokemon_conta = "/bin/echo \"$(/usr/bin/jq '.[] | .inventory_item_data.pokemon_data.nickname' /opt/PokemonGo-Bot/web/inventory-<inventario>.json | /bin/grep -v null | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/sort | /usr/bin/wc -l)+$(/usr/bin/jq '.[] | .inventory_item_data.pokemon_data.is_egg' /opt/PokemonGo-Bot/web/inventory-<inventario>.json | /bin/grep -v null | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/cut -c 2- | /usr/bin/rev | /usr/bin/sort | /usr/bin/wc -l)\" /usr/bin/bc -l"
 
 $bol_avvia_pokebot    = false
 $bol_citta_pokebot    = false
