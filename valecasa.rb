@@ -614,7 +614,7 @@ begin
                 processo = stdout.chomp
                 stdout,stderr,status = Open3.capture3($pokemap_stop1.gsub("<process>",processo))
                 stdout,stderr,status = Open3.capture3($pokemap_stop2.gsub("<process>",processo))
-                unless citta == ""
+                unless citta.nil?
                   bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} stoppata!")
                   bot.api.send_message(chat_id: $notify, text: "PokeMap città #{citta} stoppata da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
                 else
@@ -646,8 +646,13 @@ begin
               stdout,stderr,status = Open3.capture3($pokemap_getcoord)
               coordinate = stdout.chomp
               citta = Dir.entries("/opt/PokemonGo-Bot/configs/citta").select {|f| next if File.directory?(f); !File.foreach("/opt/PokemonGo-Bot/configs/citta/#{f}").grep(/#{coordinate}/).empty?}[0]
-              bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} attiva!")
-              bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: https://pegasus78.ddns.net/map/")
+              unless citta.nil?
+                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap città #{citta} attiva!")
+                bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: https://pegasus78.ddns.net/map/")
+              else
+                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeMap coordinate #{coordinate} attiva!")
+                bot.api.send_message(chat_id: message.chat.id, text: "Mappa visibile su: https://pegasus78.ddns.net/map/")
+              end
             end
           else
             $log.error(stderr.chomp) if !stderr.empty?
@@ -670,7 +675,7 @@ begin
               stdout,stderr,status = Open3.capture3($pokemap_getcoord)
               coordinate = stdout.chomp
               citta = Dir.entries("/opt/PokemonGo-Bot/configs/citta").select {|f| next if File.directory?(f); !File.foreach("/opt/PokemonGo-Bot/configs/citta/#{f}").grep(/#{coordinate}/).empty?}[0]
-              unless citta == ""
+              unless citta.nil?
                 bot.api.send_message(chat_id: message.chat.id, text: "Non posso visualizzare una mappa custom perché la PokeMap è già avviata nella città: #{citta.chomp}!")
               else
                 bot.api.send_message(chat_id: message.chat.id, text: "Non posso visualizzare una mappa custom perché la PokeMap è già avviata alle coordinate: #{coordinate}!")
