@@ -1,4 +1,4 @@
-$Version = "1.0.5"
+$Version = "1.0.6"
 
 $token_file = '/opt/valecasa_bot_telegram.token'
 $downl_pass = IO.read('/opt/valecasa_bot_telegram.pass').chomp
@@ -81,10 +81,12 @@ $cisco_bandwidth_graph = '/home/kodi/.kodi/dev/ruby/telegram_bot/graphs/cisco.pn
 #PokemonGo-Bot
 $pokebot_utenti   = '/bin/ls -1 /opt/PokemonGo-Bot/configs/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $3}\' | /usr/bin/sort | /usr/bin/uniq'
 $pokebot_utente_N = '/bin/ls -1 /opt/PokemonGo-Bot/configs/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $3}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
-$pokebot_citta    = '/bin/ls -1 /opt/PokemonGo-Bot/configs/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq'
-$pokebot_citta_N  = '/bin/ls -1 /opt/PokemonGo-Bot/configs/config.json* | /bin/grep -v example | /bin/grep -v \'config\\.json$\' | /usr/bin/awk -F\'.\' \'{print $4}\' | /bin/grep -v \'^$\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
+$pokebot_citta    = '/bin/ls -1 /opt/PokemonGo-Bot/configs/citta/* | /usr/bin/awk -F\'/\' \'{print $6}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq'
+$pokebot_citta_N  = '/bin/ls -1 /opt/PokemonGo-Bot/configs/citta/* | /usr/bin/awk -F\'/\' \'{print $6}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
+$pokebot_path     = '/bin/ls -1 /opt/PokemonGo-Bot/configs/path/* | /usr/bin/awk -F\'/\' \'{print $6}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq'
+$pokebot_path_N   = '/bin/ls -1 /opt/PokemonGo-Bot/configs/path/* | /usr/bin/awk -F\'/\' \'{print $6}\' | /usr/bin/awk -F\'.\' \'{print $1}\' | /usr/bin/sort | /usr/bin/uniq | /usr/bin/awk \'NR == <number>\''
 $pokebot_avvia    = '/opt/PokemonGo-Bot/<utente>.sh <citta>'
-$pokebot_checkrun_user = '/bin/ps ax | /bin/grep \'python pokecli.py -cf configs/config.json.<utente>\' | /bin/grep -v grep'
+$pokebot_checkrun_user = '/bin/ps ax | /bin/grep \'python pokecli.py -cf configs/config.json.<utente>\\|python pokecli.py -cf /tmp/config.json.<utente>\' | /bin/grep -v grep'
 $pokebot_checkrun = '/bin/ps ax | /bin/grep \'python pokecli.py\' | /bin/grep -v grep'
 $pokebot_checkrun2 = '/bin/ps ax | /bin/grep \'python pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\''
 $pokebot_checkrun_N = '/bin/ps ax | /bin/grep \'python pokecli.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $8}\' | /usr/bin/awk -F\'.\' \'{print $3" "$4}\' | /usr/bin/awk \'NR == <number>\''
@@ -140,6 +142,12 @@ $pokemap_stop_coord  = '/usr/bin/pgrep mappa_coord.sh'
 
 $bol_mostra_mappa         = false
 #$bol_mostra_mappa_attiva  = false
+
+$bol_avvia_pokebot_path = false
+$bol_citta_pokebot_path = false
+$bol_path_pokebot_path  = false
+$conta_path_pokebot     = 0
+$citta_pokebot          = nil
 
 def local_log
   logfile="valecasa_bot.log"

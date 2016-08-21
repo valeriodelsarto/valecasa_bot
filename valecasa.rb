@@ -689,6 +689,31 @@ begin
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_show completato!")
           end
+        when '/poke_start_path'
+          puts "Ricevuto messaggio /poke_start_path \n"
+          $log.info("Eseguo comando #{$pokebot_utenti}")
+          errors = false
+          stdout,stderr,status = Open3.capture3($pokebot_utenti)
+          errors = true if !stderr.empty?
+          if errors == false
+            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+            messaggio = ""
+            array_p_choose = Array.new
+            array_p_choose = stdout.split(/\n/)
+            conta = 1
+            array_p_choose.each do |riga|
+              messaggio += "#{conta.to_s}) #{riga}\n"
+              conta += 1
+            end
+            $bol_avvia_pokebot_path = true
+            $conta_utenti_pokebot = conta - 1
+            bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale utente vuoi avviare?")
+            bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+          else
+            $log.error(stderr.chomp) if !stderr.empty?
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
+          end
         else
           if $bol_aggiungi_1
             if (message.text =~ URI::regexp("ed2k"))
@@ -1247,6 +1272,109 @@ begin
           #  end
           #  $bol_mostra_mappa_attiva = false
           #  bot.api.send_message(chat_id: message.chat.id, text: "Comando /pokemap_show completato!")
+          elsif $bol_avvia_pokebot_path
+            if message.text.to_i > 0 and message.text.to_i <= $conta_utenti_pokebot
+              stdout,stderr,status = Open3.capture3($pokebot_utente_N.gsub("<number>",message.text))
+              pokebot_utente = stdout.chomp
+              stdout,stderr,status = Open3.capture3($pokebot_checkrun_user.gsub("<utente>",pokebot_utente))
+              if stdout.chomp == ""
+                puts "Chiedo in quale città avviare il PokeBot per l'utente #{pokebot_utente} \n"
+                $log.info("Eseguo comando #{$pokebot_citta}")
+                errors = false
+                stdout,stderr,status = Open3.capture3($pokebot_citta)
+                errors = true if !stderr.empty?
+                if errors == false
+                  $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                  messaggio = ""
+                  array_pc_choose = Array.new
+                  array_pc_choose = stdout.split(/\n/)
+                  conta = 1
+                  array_pc_choose.each do |riga|
+                    messaggio += "#{conta.to_s}) #{riga}\n"
+                    conta += 1
+                  end
+                  $bol_avvia_pokebot_path = false
+                  $bol_citta_pokebot_path = true
+                  $conta_citta_pokebot = conta - 1
+                  $conta_utenti_pokebot = 0
+                  $utente_pokebot = pokebot_utente
+                  bot.api.send_message(chat_id: message.chat.id, text: "OK!\nIn quale città vuoi avviare l'utente #{pokebot_utente}?")
+                  bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+                else
+                  $log.error(stderr.chomp) if !stderr.empty?
+                  bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+                end
+              else
+                puts "Errore, il PokeBot per l'utente #{pokebot_utente} è già avviato! \n"
+                $log.info("Errore, il PokeBot per l'utente #{pokebot_utente} è già avviato!")
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore, il PokeBot per l'utente #{pokebot_utente} è già avviato!")
+                bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
+                $bol_avvia_pokebot_path = false
+                $conta_utenti_pokebot = 0
+              end
+            else
+              puts "Numero errato utente da avviare su Pokebot: #{message.text} \n"
+              $log.info("Numero errato utente da avviare su Pokebot: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Numero utente errato! Deve essere un numero compreso fra 1 e #{$conta_utenti_pokebot}!")
+              bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
+              $bol_avvia_pokebot_path = false
+              $conta_utenti_pokebot = 0
+            end
+          elsif $bol_citta_pokebot_path
+            if message.text.to_i > 0 and message.text.to_i <= $conta_citta_pokebot
+              stdout,stderr,status = Open3.capture3($pokebot_citta_N.gsub("<number>",message.text))
+              pokebot_citta = stdout.chomp
+              puts "Chiedo in quale percorso avviare il PokeBot per l'utente #{$utente_pokebot} nella città #{pokebot_citta} \n"
+              $log.info("Eseguo comando #{$pokebot_path}")
+              errors = false
+              stdout,stderr,status = Open3.capture3($pokebot_path)
+              errors = true if !stderr.empty?
+              if errors == false
+                $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                messaggio = ""
+                array_pc_choose = Array.new
+                array_pc_choose = stdout.split(/\n/)
+                conta = 1
+                array_pc_choose.each do |riga|
+                  messaggio += "#{conta.to_s}) #{riga}\n"
+                  conta += 1
+                end
+                $bol_citta_pokebot_path = false
+                $bol_path_pokebot_path = true
+                $conta_path_pokebot = conta - 1
+                $conta_citta_pokebot = 0
+                $citta_pokebot = pokebot_citta
+                bot.api.send_message(chat_id: message.chat.id, text: "OK!\nIn quale percorso vuoi avviare l'utente #{$utente_pokebot} nella città #{pokebot_citta}?")
+                bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+              else
+                $log.error(stderr.chomp) if !stderr.empty?
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+              end
+            else
+              puts "Numero errato città da avviare su Pokebot: #{message.text} \n"
+              $log.info("Numero errato città da avviare su Pokebot: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Numero città errato! Deve essere un numero compreso fra 1 e #{$conta_citta_pokebot}!")
+            end
+            $bol_citta_pokebot_path = false
+            $conta_citta_pokebot = 0
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
+          elsif $bol_path_pokebot_path
+            if message.text.to_i > 0 and message.text.to_i <= $conta_path_pokebot
+              stdout,stderr,status = Open3.capture3($pokebot_path_N.gsub("<number>",message.text))
+              pokebot_path = stdout.chomp
+              puts "Avvio il PokeBot per l'utente #{$utente_pokebot} nella città #{$citta_pokebot} col percorso #{pokebot_path} \n"
+              $log.info("Eseguo comando #{$pokebot_avvia}")
+              system("#{$pokebot_avvia.gsub("<utente>",$utente_pokebot).gsub("<citta>",$citta_pokebot)} #{pokebot_path} > /opt/PokemonGo-Bot/log/#{$utente_pokebot}.log 2>&1 &")
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\nPokeBot avviato per l'utente #{$utente_pokebot} nella città #{$citta_pokebot} col percorso #{pokebot_path}!")
+              bot.api.send_message(chat_id: $notify, text: "PokeBot avviato per l'utente #{$utente_pokebot} nella città #{$citta_pokebot} col percorso #{pokebot_path} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+            else
+              puts "Numero errato percorso da avviare su Pokebot: #{message.text} \n"
+              $log.info("Numero errato percorso da avviare su Pokebot: #{message.text}")
+              bot.api.send_message(chat_id: message.chat.id, text: "Numero percorso errato! Deve essere un numero compreso fra 1 e #{$conta_path_pokebot}!")
+            end
+            $bol_path_pokebot_path = false
+            $conta_path_pokebot = 0
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
           else
             puts "Ricevuto messaggio #{message.text} \n"
             bot.api.send_message(chat_id: message.chat.id, text: "Comando non riconosciuto!")
