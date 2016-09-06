@@ -1,4 +1,4 @@
-$Version = "1.0.6"
+$Version = "1.0.7"
 
 $token_file = '/opt/valecasa_bot_telegram.token'
 $downl_pass = IO.read('/opt/valecasa_bot_telegram.pass').chomp

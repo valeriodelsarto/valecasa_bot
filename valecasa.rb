@@ -1399,4 +1399,8 @@ rescue Faraday::Error::ConnectionFailed => e
   $log.warn("NO INTERNET ACCESS!! RETRYING IN 1 MINUTE...")
   sleep(60)
   retry
+rescue Telegram::Bot::Exceptions::ResponseError => e
+  $log.warn("Telegram API Exception!! RETRYING IN 1 MINUTE...")
+  sleep(60)
+  retry
 end
