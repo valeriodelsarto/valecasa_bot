@@ -127,7 +127,7 @@ $pokemap_stop      = '/usr/bin/pgrep mappa.sh'
 $pokemap_stop1     = '/usr/bin/pkill -TERM -P <process>'
 $pokemap_stop2     = '/bin/kill <process>'
 $pokemap_checkrun  = '/bin/ps ax | /bin/grep \'python runserver.py\' | /bin/grep -v grep'
-$pokemap_getcoord  = '/bin/ps ax | /bin/grep \'python runserver.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $14}\''
+$pokemap_getcoord  = '/bin/ps ax | /bin/grep \'python runserver.py\' | /bin/grep -v grep | /usr/bin/awk \'{print $16}\''
 
 $bol_avvia_pokemap    = false
 $conta_citta_pokemap  = 0
