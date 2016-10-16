@@ -891,7 +891,7 @@ begin
                   array_e_choose = stdout.split(/\n/)
                   muovi = array_e_choose[$file_da_muovere.to_i-1]
                   folder = $array_kodi_folder[message.text.to_i-1]
-                  $log.info("Eseguo comando #{$cmd_muovi_1.gsub("<filename>",muovi).gsub("<folder>",folder)}")
+                  $log.info("Eseguo comando #{$cmd_muovi_1.gsub("<filename>",muovi.dump).gsub("<folder>",folder)}")
                   stdout,stderr,status = Open3.capture3($cmd_ferma_e)
                   stdout,stderr,status = Open3.capture3($cmd_muovi_1.gsub("<filename>",muovi).gsub("<folder>",folder)) if status.success?
                   errors = true if !stderr.empty?
