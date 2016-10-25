@@ -281,19 +281,23 @@ begin
           stdout,stderr,status = Open3.capture3($cmd_e_choose_1)
           errors = true if !stderr.empty?
           if errors == false
-            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
-            messaggio = ""
-            array_e_choose = Array.new
-            array_e_choose = stdout.split(/\n/)
-            conta = 1
-            array_e_choose.each do |riga|
-              messaggio += "#{conta.to_s}) #{riga}\n"
-              conta += 1
+            unless stdout == ""
+              $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+              messaggio = ""
+              array_e_choose = Array.new
+              array_e_choose = stdout.split(/\n/)
+              conta = 1
+              array_e_choose.each do |riga|
+                messaggio += "#{conta.to_s}) #{riga}\n"
+                conta += 1
+              end
+              $bol_rimuovi_1 = true
+              $conta_down_e = conta - 1
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale download vuoi eliminare?")
+              bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+            else
+              bot.api.send_message(chat_id: message.chat.id, text: "Non ci sono download da eliminare!")
             end
-            $bol_rimuovi_1 = true
-            $conta_down_e = conta - 1
-            bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale download vuoi eliminare?")
-            bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
           else
             $log.error(stderr.chomp) if !stderr.empty?
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
@@ -305,19 +309,23 @@ begin
           stdout,stderr,status = Open3.capture3($cmd_t_choose_1)
           errors = true if !stderr.empty?
           if errors == false
-            $log.info("Output: #{stdout.chomp}") if !stdout.empty?
-            messaggio = ""
-            array_t_choose = Array.new
-            array_t_choose = stdout.split(/\n/)
-            conta = 1
-            array_t_choose.each do |riga|
-              messaggio += "#{conta.to_s}) #{riga}\n"
-              conta += 1
+            unless stdout == ""
+              $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+              messaggio = ""
+              array_t_choose = Array.new
+              array_t_choose = stdout.split(/\n/)
+              conta = 1
+              array_t_choose.each do |riga|
+                messaggio += "#{conta.to_s}) #{riga}\n"
+                conta += 1
+              end
+              $bol_rimuovi_2 = true
+              $conta_down_t = conta - 1
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale download vuoi eliminare?")
+              bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
+            else
+              bot.api.send_message(chat_id: message.chat.id, text: "Non ci sono download da eliminare!")
             end
-            $bol_rimuovi_2 = true
-            $conta_down_t = conta - 1
-            bot.api.send_message(chat_id: message.chat.id, text: "OK!\nQuale download vuoi eliminare?")
-            bot.api.send_message(chat_id: message.chat.id, text: "#{messaggio}")
           else
             $log.error(stderr.chomp) if !stderr.empty?
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
