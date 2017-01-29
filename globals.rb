@@ -1,4 +1,4 @@
-$Version = "1.0.7"
+$Version = "1.0.8"
 
 $token_file = '/opt/valecasa_bot_telegram.token'
 $downl_pass = IO.read('/opt/valecasa_bot_telegram.pass').chomp
@@ -44,6 +44,7 @@ $cmd_e_choose_1  = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"show dl\" | sed
 $cmd_e_choose_2  = "/usr/bin/amulecmd -P \"#{$downl_pass}\" -c \"show dl\" | sed 1,4d | egrep -v \".*\[[0-9]{1,2}\.[0-9]{1,2}\%\].*\" | awk \'{print $2}\'"
 $cmd_t_choose_1  = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -l | egrep \".* [0-9]{1,3}\% .*\" | awk \'{print $10}\'"
 $cmd_remove_t_x  = "/usr/bin/transmission-remote -n valerio:#{$downl_pass} -t <number> -r"
+$cmd_wget        = "/usr/bin/wget -q -O /tmp/valecasabot_wget_tempfile <wget_url>"
 
 $cmd_ferma_e     = '/usr/bin/sudo /usr/sbin/service amule-daemon stop'
 $cmd_avvia_e     = '/usr/bin/sudo /usr/sbin/service amule-daemon start'
@@ -55,16 +56,17 @@ $cmd_kodi_notifica     = '/usr/bin/kodi-send --action="Notification(<titolo>,<me
 
 $cmd_read_hum_temp_sensor = '/usr/bin/sudo /home/kodi/.kodi/dev/ruby/telegram_bot/hum_temp_sensor.py'
 
-$bol_aggiungi_1    = false
-$bol_aggiungi_2    = false
-$bol_kodi_msg      = false
-$bol_kodi_msg_t    = false
-$bol_rimuovi_1     = false
-$bol_rimuovi_2     = false
-$bol_muovi_1       = false
-$bol_muovi_2       = false
-$bol_muovi_1_step2 = false
-$bol_muovi_2_step2 = false
+$bol_aggiungi_1       = false
+$bol_aggiungi_2       = false
+$bol_kodi_msg         = false
+$bol_kodi_msg_t       = false
+$bol_rimuovi_1        = false
+$bol_rimuovi_2        = false
+$bol_muovi_1          = false
+$bol_muovi_2          = false
+$bol_muovi_1_step2    = false
+$bol_muovi_2_step2    = false
+$bol_aggiungi_1_multi = false
 
 $conta_down_e    = 0
 $conta_down_t    = 0

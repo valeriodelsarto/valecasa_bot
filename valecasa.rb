@@ -722,6 +722,10 @@ begin
             bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
           end
+        when '/aggiungi_1_multi'
+          puts "Ricevuto messaggio /aggiungi_1_multi \n"
+          $bol_aggiungi_1_multi = true
+          bot.api.send_message(chat_id: message.chat.id, text: "OK!\nInviami il link dropbox del sorgente html da parsare!")
         else
           if $bol_aggiungi_1
             if (message.text =~ URI::regexp("ed2k"))
@@ -1383,6 +1387,55 @@ begin
             $bol_path_pokebot_path = false
             $conta_path_pokebot = 0
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
+          elsif $bol_aggiungi_1_multi
+            if (message.text =~ URI::regexp("dropbox"))
+              puts "Ricevuto link dropbox sorgente html da parsare! \n"
+              $log.info("Eseguo comando #{$cmd_wget}")
+              errors = false
+              stdout,stderr,status = Open3.capture3($cmd_wget.gsub("<wget_url>",message.text))
+              errors = true if !stderr.empty?
+              if errors == false
+                $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                puts "Scaricato link dropbox, leggo il file e parso il contenuto prendendo tutti i link ed2k! \n"
+                $log.info("Scaricato link dropbox, leggo il file e parso il contenuto prendendo tutti i link ed2k!")
+                File.open("/tmp/valecasabot_wget_tempfile") do |file|
+                  file.each_line do |line|
+                    while line =~ /href="ed2k.*"/
+                      link_da_aggiungere = line.slice!(/href="ed2k.*?\/"/).chop![6..-1]
+                      puts "Trovato link da aggiungere: #{link_da_aggiungere} \n"
+                      $log.info("Eseguo comando #{$cmd_aggiungi_1} con link #{link_da_aggiungere}")
+                      errors = false
+                      stdout,stderr,status = Open3.capture3($cmd_aggiungi_1.gsub("<ed2klink>",link_da_aggiungere))
+                      errors = true if !stderr.empty?
+                      if errors == false
+                        $log.info("Output: #{stdout.chomp}") if !stdout.empty?
+                        bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp}")
+                        bot.api.send_message(chat_id: $notify, text: "Aggiunto file ed2k #{message.text} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stdout.chomp}") if message.from.id != $notify
+                      else
+                        $log.error(stderr.chomp) if !stderr.empty?
+                        bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+                        bot.api.send_message(chat_id: $notify, text: "Errore in aggiunta file ed2k #{message.text} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+                      end
+                    end
+                  end
+                end
+                puts "Parsing del link dropbox completato! Cancello il file temporaneo su disco... \n"
+                $log.info("Parsing del link dropbox completato! Cancello il file temporaneo su disco")
+                FileUtils.rm("/tmp/valecasabot_wget_tempfile")
+                $bol_aggiungi_1_multi = false
+                bot.api.send_message(chat_id: message.chat.id, text: "Comando /aggiungi_1_multi completato!")
+              else
+                $log.error(stderr.chomp) if !stderr.empty?
+                bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+                bot.api.send_message(chat_id: $notify, text: "Errore in download link dropbox #{message.text} da #{message.from.id} - #{message.from.first_name}, risultato: \n#{stderr.chomp}") if message.from.id != $notify
+              end
+            else
+              puts "Ricevuto link dropbox html in formato errato! \n"
+              puts "URL ricevuto: #{message.text}"
+              bot.api.send_message(chat_id: message.chat.id, text: "link dropbox html errato!")
+            end
+            $bol_aggiungi_1_multi = false
+            bot.api.send_message(chat_id: message.chat.id, text: "Comando /aggiungi_1_multi completato!")
           else
             puts "Ricevuto messaggio #{message.text} \n"
             bot.api.send_message(chat_id: message.chat.id, text: "Comando non riconosciuto!")
