@@ -1422,8 +1422,6 @@ begin
                 puts "Parsing del link dropbox completato! Cancello il file temporaneo su disco... \n"
                 $log.info("Parsing del link dropbox completato! Cancello il file temporaneo su disco")
                 FileUtils.rm("/tmp/valecasabot_wget_tempfile")
-                $bol_aggiungi_1_multi = false
-                bot.api.send_message(chat_id: message.chat.id, text: "Comando /aggiungi_1_multi completato!")
               else
                 $log.error(stderr.chomp) if !stderr.empty?
                 bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
