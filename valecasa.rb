@@ -1388,7 +1388,7 @@ begin
             $conta_path_pokebot = 0
             bot.api.send_message(chat_id: message.chat.id, text: "Comando /poke_start_path completato!")
           elsif $bol_aggiungi_1_multi
-            if (message.text =~ URI::regexp("dropbox"))
+            if (message.text =~ URI::regexp("https") and (message.text.include?("dropbox")))
               puts "Ricevuto link dropbox sorgente html da parsare! \n"
               $log.info("Eseguo comando #{$cmd_wget}")
               errors = false
