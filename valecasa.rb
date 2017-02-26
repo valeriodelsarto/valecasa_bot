@@ -24,14 +24,14 @@ begin
           if errors == false
             $log.info("Output: #{stdout.chomp}") if !stdout.empty?
             if stdout.chomp.length > 4090
-              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp.slice(0,4090)}")
-              bot.api.send_message(chat_id: message.chat.id, text: "#{stdout.chomp.slice(4090,stdout.chomp.length-4090)}")
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp.slice(0,4090).scrub}")
+              bot.api.send_message(chat_id: message.chat.id, text: "#{stdout.chomp.slice(4090,stdout.chomp.length-4090).scrub}")
             else
-              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp}")
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp.scrub}")
             end
           else
             $log.error(stderr.chomp) if !stderr.empty?
-            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp.scrub}")
           end
         when '/lista_1_s'
           puts "Ricevuto messaggio /lista_1_s \n"
@@ -42,14 +42,14 @@ begin
           if errors == false
             $log.info("Output: #{stdout.chomp}") if !stdout.empty?
             if stdout.chomp.length > 4090
-              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp.slice(0,4090)}")
-              bot.api.send_message(chat_id: message.chat.id, text: "#{stdout.chomp.slice(4090,stdout.chomp.length-4090)}")
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp.slice(0,4090).scrub}")
+              bot.api.send_message(chat_id: message.chat.id, text: "#{stdout.chomp.slice(4090,stdout.chomp.length-4090).scrub}")
             else
-              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp}")
+              bot.api.send_message(chat_id: message.chat.id, text: "OK!\n#{stdout.chomp.scrub}")
             end
           else
             $log.error(stderr.chomp) if !stderr.empty?
-            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp}")
+            bot.api.send_message(chat_id: message.chat.id, text: "Errore!\n#{stderr.chomp.scrub}")
           end
         when '/lista_2'
           puts "Ricevuto messaggio /lista_2 \n"
