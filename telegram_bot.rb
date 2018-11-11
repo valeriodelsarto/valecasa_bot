@@ -5,6 +5,7 @@ require 'process/daemon'
 require 'telegram/bot'
 require 'open3'
 require 'uri'
+require 'logger'
 
 $log = local_log
 
